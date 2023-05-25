@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import sys
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +29,7 @@ SECRET_KEY = 'django-insecure-@d^3sfzdlnpw@ny#n_1r006un&fel&(w+5e=-os97x4b@ohj@9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
 
 
 # Application definition
@@ -37,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'oauth2_provider',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +53,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ],
+}
 
 ROOT_URLCONF = 'TraffoozePrj.urls'
 
@@ -73,12 +84,25 @@ WSGI_APPLICATION = 'TraffoozePrj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db_test.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'djongo',
+            'NAME': 'Bsian',
+            'CLIENT': {
+                'host' :'mongodb+srv://traffooze:traffooze@traffoozedb.mytlhqy.mongodb.net/', #needs to change cluster link to something else
+                'username': 'traffooze', #change username
+                'PASSWORD': 'traffooze', #change password
+            }
+        }
+    }
 
 
 # Password validation
@@ -117,6 +141,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 # Default primary key field type
