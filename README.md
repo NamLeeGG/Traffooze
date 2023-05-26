@@ -1,6 +1,9 @@
 # Backend Setup Guide
 https://docs.google.com/document/d/1OQLPm4QB5iM6yBPQvDWgxyPi2YLwCt7dqylEW6S3LK8/edit
 
+# Frontend Setup Guide
+
+
 # Traffooze
 FYP-23-S2-23 -  Traffooze
 
