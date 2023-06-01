@@ -16,7 +16,8 @@ class SystemAdmin(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_systemadmin', True)  # set this when creating a superuser
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)  # superusers are staff
 
         return self.create_user(username, email, password, **extra_fields)
 
@@ -26,17 +27,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     
-    is_systemadmin = models.BooleanField(default=False)  # If True, user is a system admin, else user is a normal user
-
     is_active = models.BooleanField(default=True)
-
-    objects = SystemAdmin()
+    is_staff = models.BooleanField(default=False)  # add this
+    is_superuser = models.BooleanField(default=False)  # add this
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
+
+    objects = SystemAdmin()  # set your custom manager
 
     def __str__(self):
         return self.username
 
     class Meta:
         db_table = 'auth_user'
+
+
