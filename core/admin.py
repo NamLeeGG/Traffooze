@@ -1,28 +1,31 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import User
+from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
-"""
-class ProfileAdmin(admin.ModelAdmin):
+
+class CustomSystemAdmin(UserAdmin):
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('email',)}),  
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        (_('Important dates'), {'fields': ('last_login',)}),
+    )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'role'),
+            'fields': ('username', 'email', 'password1', 'password2', 'is_staff'),
         }),
     )
-       
-    list_display = ('user', 'name', 'date_of_birth', 'loyalty_points')
-    list_filter = ('user__role',)
-    search_fields = ('user__username', 'name')
-    ordering = ('user__username',)
+    list_display = ('username', 'email', 'is_staff')
+    list_filter = ('username',)
+    search_fields = ('username', 'email')
+    ordering = ('username',)
 
-    def has_module_permission(self, request):
-        if request.user.is_superuser:
-            return True
-        else:
-            if not request.user.is_anonymous:
-                if request.user.role == 'CinemaManager':
-                    return False
-                if request.user.role == 'UserAdmin':
-                    return True
-        return False
-"""
+
+
+
+
+
+admin.site.register(User, CustomSystemAdmin)
