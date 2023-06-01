@@ -95,14 +95,15 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'djongo',
-            'NAME': 'Bsian',
+            'NAME': 'TraffoozeDBS',
             'CLIENT': {
-                'host' :'mongodb+srv://traffooze:traffooze@traffoozedb.mytlhqy.mongodb.net/', #needs to change cluster link to something else
-                'username': 'traffooze', #change username
-                'PASSWORD': 'traffooze', #change password
+                'host': 'mongodb+srv://traffooze:traffooze@traffoozedb.mytlhqy.mongodb.net/TraffoozeDBS?retryWrites=true&w=majority',
+                'username': 'traffooze',
+                'password': 'traffooze',
             }
         }
     }
+
 
 
 # Password validation
