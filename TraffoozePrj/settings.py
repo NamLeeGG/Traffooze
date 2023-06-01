@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'TraffoozePrj.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+"""
 if 'test' in sys.argv:
     DATABASES = {
         'default': {
@@ -96,17 +96,18 @@ if 'test' in sys.argv:
         }
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': 'TraffoozeDBS',
-            'CLIENT': {
-                'host': 'mongodb+srv://traffooze:traffooze@traffoozedb.mytlhqy.mongodb.net/TraffoozeDBS?retryWrites=true&w=majority',
-                'username': 'traffooze',
-                'password': 'traffooze',
-            }
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'TraffoozeDBS',
+        'CLIENT': {
+            'host': 'mongodb+srv://traffooze:traffooze@traffoozedb.mytlhqy.mongodb.net/TraffoozeDBS?retryWrites=true&w=majority',
+            'username': 'traffooze',
+            'password': 'traffooze',
         }
     }
+}
 
 
 
