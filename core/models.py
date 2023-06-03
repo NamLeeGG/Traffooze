@@ -6,8 +6,10 @@ import json
 import pandas as pd
 import datetime
 
+"
 headers = { 'AccountKey' : 'ZSRd6ixqSy+V+GnHTV7/iQ==',
              'accept' : 'application/json'} 
+"
 
 class SystemAdmin(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -49,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'auth_user'
 
+"""
 class TrafficJam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.CharField(max_length=100)
@@ -252,6 +255,6 @@ class TrafficAccident(models.Model):
             traffic_accidents.append(traffic_accident)
 
         return traffic_accidents
-
+"""
 
 
