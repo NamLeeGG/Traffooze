@@ -3,7 +3,7 @@ from djongo import models
 import uuid
 import requests
 import json
-import pandas as pd
+#import pandas as pd
 import datetime
 
 """
