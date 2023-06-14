@@ -20,7 +20,7 @@ from django.conf import settings
 from django.contrib.staticfiles.views import serve
 
 urlpatterns = [
-    #path('', include('api.urls')),    
+    path('', include('api.urls')),    
     path('admin/', admin.site.urls),
 ]+ static(settings.STATIC_URL, view=serve, show_indexes=True)
 
