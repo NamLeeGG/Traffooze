@@ -51,4 +51,41 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'auth_user'
 
+    # Traffic Jam
+    class TrafficJam(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        date = models.CharField(max_length=100)
+        time = models.CharField(max_length=20)
+        message = models.CharField(max_length=100)
+
+        def __str__(self):
+            return f"Traffic Jam, datetime: {self.date, self.time}, message: {self.message}"
+
+        def create_traffic_jam(self, date, time, message, *args, **kwargs):
+            self.message = message
+            self.date = date
+            self.time = time
+            super().save(*args, **kwargs)
+
+        @classmethod
+        def traffic_jam_all(cls):
+            return cls.objects.all()
+
+        def update_traffic_jam(self, date, time, message, *args, **kwargs):
+            if date is not None:
+                self.date = date
+            if time is not None:
+                self.time = time
+            if message is not None:
+                self.message = message
+            super().save(*args, **kwargs)
+
+        def delete_traffic_jam(self, *args, **kwargs):
+            super(TrafficJam, self).delete(*args, **kwargs)
+
+        def search_traffic_jam(cls, keyword):
+            return cls.objects.filter(message__icontains=keyword)
+
+        def get_traffic_jam(self, message):
+            return TrafficJam.objects.get(message=message)
 
