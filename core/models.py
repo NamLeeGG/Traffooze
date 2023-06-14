@@ -1,6 +1,15 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from djongo import models
 import uuid
+import requests
+import json
+#import pandas as pd
+import datetime
+
+"""
+headers = { 'AccountKey' : 'ZSRd6ixqSy+V+GnHTV7/iQ==',
+             'accept' : 'application/json'} 
+"""
 
 class SystemAdmin(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):

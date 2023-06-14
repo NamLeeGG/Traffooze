@@ -172,3 +172,4 @@ class ViewTrafficAccident(APIView):
         return Response(data)
 
 '''
+    
