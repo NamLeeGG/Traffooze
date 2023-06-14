@@ -95,7 +95,7 @@ def register_account(request):
         return Response({"error": "Bad data"}, status=500)
     
 @api_view(['POST'])
-def add_traffic_jam(request):
+def create_traffic_jam(request):
     TJserializer = TrafficJamSerializer(data=request.data)
     if TJserializer.is_valid():
         TJserializer.save()
