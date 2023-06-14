@@ -11,8 +11,8 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from core.models import User
-from .serializers import UserSerializer
+from core.models import User, TrafficJam
+from .serializers import UserSerializer, TrafficJamSerializer
 
 # LOGIN 
 from django.contrib.auth import authenticate, login
@@ -93,6 +93,14 @@ def register_account(request):
         return Response(status=status.HTTP_200_OK)
     except DatabaseError as e:
         return Response({"error": "Bad data"}, status=500)
+    
+@api_view(['POST'])
+def add_traffic_jam(request):
+    TJserializer = TrafficJamSerializer(data=request.data)
+    if TJserializer.is_valid():
+        TJserializer.save()
+        return Response(TJserializer.data, status=status.HTTP_201_CREATED)
+    return Response(TJserializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 '''
 class ViewTrafficJam(APIView):
