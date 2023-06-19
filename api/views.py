@@ -115,13 +115,8 @@ def create_traffic_jam(request):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['GET'])
-def view_traffic_jam(request):
-    result = TrafficJam.traffic_jam_all()
-    trafficjams = [tj for tj in result]
-    data = [{'id':tj.id, 'date':tj.date, 'time':tj.time, 'message':tj.message} for tj in trafficjams]
-    return Response(data)
 
+<<<<<<< HEAD
 @api_view(['POST'])
 def update_traffic_jam(request):
     trafficjam = TrafficJam()
@@ -197,6 +192,9 @@ def search_traffic_jam(request):
     data = [{'id':tj.id, 'date':tj.date, 'time':tj.time, 'message':tj.message} for tj in trafficjams]
     return Response(data)
 
+=======
+    
+>>>>>>> parent of e2a7b2e (Sprint 4: add read, update, delete and search functions in views.py)
 '''
 class ViewTrafficJam(APIView):
     authentication_classes = [TokenAuthentication]
