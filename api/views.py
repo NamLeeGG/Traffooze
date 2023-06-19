@@ -117,40 +117,6 @@ def create_traffic_jam(request):
 
 
 <<<<<<< HEAD
-@api_view(['POST'])
-def update_traffic_jam(request):
-    trafficjam = TrafficJam()
-    id = request.data.get('id')
-    date = request.data.get('date')
-    time = request.data.get('time')
-    message = request.data.get('message')
-
-    mytrafficjam = trafficjam.get_traffic_jam(id)
-    if date == '' : date = None
-    if time == '' : time = None
-    if message == '' : message = None
-    mytrafficjam.update_traffic_jam(date, time, message)
-    return Response(status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-def delete_traffic_jam(request):
-    trafficjam = TrafficJam()
-    id = request.data.get('id')
-    mytrafficjam = trafficjam.get_traffic_jam(id)
-    mytrafficjam.delete_traffic_jam()
-    return Response(status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-def search_traffic_jam(request):
-    keyword = request.data.get('keyword', '')
-    if not keyword:
-        return JsonResponse({'error' : 'Please provide a keyword to search for'})
-
-    result = TrafficJam.search_traffic_jam(keyword)
-    trafficjams = [tj for tj in result]
-    data = [{'id':tj.id, 'date':tj.date, 'time':tj.time, 'message':tj.message} for tj in trafficjams]
-    return Response(data)
-
 @api_view(['GET'])
 def view_traffic_jam(request):
     result = TrafficJam.traffic_jam_all()
