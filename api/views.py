@@ -24,6 +24,7 @@ from rest_framework.response import Response
 
 # Create your views here.
 
+###### ACCOUNT ######
 #LOGIN
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -94,6 +95,8 @@ def register_account(request):
     except DatabaseError as e:
         return Response({"error": "Bad data"}, status=500)
     
+
+###### TRAFFIC JAM ######    
 @api_view(['POST'])
 def create_traffic_jam(request):
     try:
