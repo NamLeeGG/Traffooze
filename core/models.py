@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from djongo import models
 import uuid
-import requests
 import json
 #import pandas as pd
 import datetime

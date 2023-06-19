@@ -96,11 +96,23 @@ def register_account(request):
     
 @api_view(['POST'])
 def create_traffic_jam(request):
-    TJserializer = TrafficJamSerializer(data=request.data)
-    if TJserializer.is_valid():
-        TJserializer.save()
-        return Response(TJserializer.data, status=status.HTTP_201_CREATED)
-    return Response(TJserializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        date = request.data.get('date')
+        time = request.data.get('time')
+        message = request.data.get('message')
+
+        if not date or not time or not message:
+            return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
+
+        traffic_jam = TrafficJam()
+        traffic_jam.create_traffic_jam(date=date, time=time, message=message)
+        traffic_jam.save()
+
+        return Response({"message": "Traffic jam created successfully"}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
     
 '''
 class ViewTrafficJam(APIView):
