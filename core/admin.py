@@ -31,11 +31,3 @@ class TrafficJamAdmin(admin.ModelAdmin):
 
 admin.site.register(User, CustomSystemAdmin)
 admin.site.register(TrafficJam, TrafficJamAdmin)
-
-
-
-
-
-
-
-admin.site.register(User, CustomSystemAdmin)
