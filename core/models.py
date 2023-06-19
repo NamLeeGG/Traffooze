@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from djongo import models
+from django.db import models
 import uuid
 import json
 #import pandas as pd
