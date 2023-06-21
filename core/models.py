@@ -82,6 +82,7 @@ class TrafficJam(models.Model):
     def delete_traffic_jam(self, *args, **kwargs):
         super(TrafficJam, self).delete(*args, **kwargs)
 
+    @classmethod
     def search_traffic_jam(cls, keyword):
         return cls.objects.filter(message__icontains=keyword)
 
