@@ -88,6 +88,44 @@ class TrafficJam(models.Model):
     def get_traffic_jam(self, message):
         return TrafficJam.objects.get(message=message)
 
+# Traffic Accident
+class TrafficAccident(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.CharField(max_length=100)
+    time = models.CharField(max_length=20)
+    message = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Traffic Accident, datetime: {self.date, self.time}, message: {self.message}"
+
+    def create_traffic_accident(self, date, time, message, *args, **kwargs):
+        self.message = message
+        self.date = date
+        self.time = time
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def traffic_accident_all(cls):
+        return cls.objects.all()
+
+    def update_accident_accident(self, date, time, message, *args, **kwargs):
+        if date is not None:
+            self.date = date
+        if time is not None:
+            self.time = time
+        if message is not None:
+            self.message = message
+        super().save(*args, **kwargs)
+
+    def delete_traffic_accident(self, *args, **kwargs):
+        super(TrafficAccident, self).delete(*args, **kwargs)
+
+    def search_traffic_accident(cls, keyword):
+        return cls.objects.filter(message__icontains=keyword)
+
+    def get_traffic_accident(self, message):
+        return TrafficAccident.objects.get(message=message)
+
 """
 class TrafficJam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
