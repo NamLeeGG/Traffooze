@@ -204,6 +204,44 @@ class RoadWorks(models.Model):
     def get_road_works(self, message):
         return RoadWorks.objects.get(message=message)
 
+# Vehicle Breakdown
+class VehicleBreakdown(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.CharField(max_length=100)
+    time = models.CharField(max_length=20)
+    message = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Vehicle Breakdown, datetime: {self.date, self.time}, message: {self.message}"
+
+    def create_vehicle_breakdown(self, date, time, message, *args, **kwargs):
+        self.message = message
+        self.date = date
+        self.time = time
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def vehicle_breakdown_all(cls):
+        return cls.objects.all()
+
+    def update_vehicle_breakdown(self, date, time, message, *args, **kwargs):
+        if date is not None:
+            self.date = date
+        if time is not None:
+            self.time = time
+        if message is not None:
+            self.message = message
+        super().save(*args, **kwargs)
+
+    def delete_vehicle_breakdown(self, *args, **kwargs):
+        super(VehicleBreakdown, self).delete(*args, **kwargs)
+
+    def search_vehicle_breakdown(cls, keyword):
+        return cls.objects.filter(message__icontains=keyword)
+
+    def get_vehicle_breakdown(self, message):
+        return VehicleBreakdown.objects.get(message=message)
+
 """
 class TrafficJam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
