@@ -166,6 +166,44 @@ class TrafficClosure(models.Model):
     def get_traffic_closure(self, message):
         return TrafficClosure.objects.get(message=message)
 
+# Road works
+class RoadWorks(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.CharField(max_length=100)
+    time = models.CharField(max_length=20)
+    message = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Road Works, datetime: {self.date, self.time}, message: {self.message}"
+
+    def create_road_works(self, date, time, message, *args, **kwargs):
+        self.message = message
+        self.date = date
+        self.time = time
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def road_works_all(cls):
+        return cls.objects.all()
+
+    def update_road_works(self, date, time, message, *args, **kwargs):
+        if date is not None:
+            self.date = date
+        if time is not None:
+            self.time = time
+        if message is not None:
+            self.message = message
+        super().save(*args, **kwargs)
+
+    def delete_road_works(self, *args, **kwargs):
+        super(RoadWorks, self).delete(*args, **kwargs)
+
+    def search_road_works(cls, keyword):
+        return cls.objects.filter(message__icontains=keyword)
+
+    def get_road_works(self, message):
+        return RoadWorks.objects.get(message=message)
+
 """
 class TrafficJam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
