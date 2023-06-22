@@ -109,7 +109,7 @@ class TrafficAccident(models.Model):
     def traffic_accident_all(cls):
         return cls.objects.all()
 
-    def update_accident_accident(self, date, time, message, *args, **kwargs):
+    def update_traffic_accident(self, date, time, message, *args, **kwargs):
         if date is not None:
             self.date = date
         if time is not None:
@@ -126,6 +126,45 @@ class TrafficAccident(models.Model):
 
     def get_traffic_accident(self, message):
         return TrafficAccident.objects.get(message=message)
+
+
+# Traffic Closure
+class TrafficClosure(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.CharField(max_length=100)
+    time = models.CharField(max_length=20)
+    message = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Traffic Closure, datetime: {self.date, self.time}, message: {self.message}"
+
+    def create_traffic_closure(self, date, time, message, *args, **kwargs):
+        self.message = message
+        self.date = date
+        self.time = time
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def traffic_closure_all(cls):
+        return cls.objects.all()
+
+    def update_traffic_closure(self, date, time, message, *args, **kwargs):
+        if date is not None:
+            self.date = date
+        if time is not None:
+            self.time = time
+        if message is not None:
+            self.message = message
+        super().save(*args, **kwargs)
+
+    def delete_traffic_closure(self, *args, **kwargs):
+        super(TrafficClosure, self).delete(*args, **kwargs)
+
+    def search_traffic_closure(cls, keyword):
+        return cls.objects.filter(message__icontains=keyword)
+
+    def get_traffic_closure(self, message):
+        return TrafficClosure.objects.get(message=message)
 
 """
 class TrafficJam(models.Model):
