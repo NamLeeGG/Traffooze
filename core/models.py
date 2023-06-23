@@ -50,33 +50,38 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'auth_user'
 
+
 # Traffic Jam
 class TrafficJam(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.CharField(max_length=100)
-    time = models.CharField(max_length=20)
+    date = models.DateField()
+    time = models.TimeField()
     message = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Traffic Jam, datetime: {self.date, self.time}, message: {self.message}"
+        return f"Traffic Jam, datetime: {self.date}, {self.time}, message: {self.message}"
 
-    def create_traffic_jam(self, date, time, message, *args, **kwargs):
+    def create_traffic_jam(self, date, time, message, location, *args, **kwargs):
         self.message = message
         self.date = date
         self.time = time
+        self.location = location
         super().save(*args, **kwargs)
 
     @classmethod
     def traffic_jam_all(cls):
         return cls.objects.all()
 
-    def update_traffic_jam(self, date, time, message, *args, **kwargs):
+    def update_traffic_jam(self, date, time, message, location, *args, **kwargs):
         if date is not None:
             self.date = date
         if time is not None:
             self.time = time
         if message is not None:
             self.message = message
+        if location is not None:
+            self.location = location
         super().save(*args, **kwargs)
 
     def delete_traffic_jam(self, *args, **kwargs):
@@ -86,85 +91,97 @@ class TrafficJam(models.Model):
     def search_traffic_jam(cls, keyword):
         return cls.objects.filter(message__icontains=keyword)
 
-    def get_traffic_jam(self, message):
-        return TrafficJam.objects.get(message=message)
+    def get_traffic_jam(self, id):
+        return TrafficJam.objects.get(id=id)
+
 
 # Traffic Accident
-class TrafficAccident(models.Model):
+class RoadAccident(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.CharField(max_length=100)
-    time = models.CharField(max_length=20)
+    date = models.DateField()
+    time = models.TimeField()
     message = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Traffic Accident, datetime: {self.date, self.time}, message: {self.message}"
+        return f"Road Accident, datetime: {self.date}, {self.time}, message: {self.message}"
 
-    def create_traffic_accident(self, date, time, message, *args, **kwargs):
+    def create_road_accident(self, date, time, message, location, *args, **kwargs):
         self.message = message
         self.date = date
         self.time = time
+        self.location = location
         super().save(*args, **kwargs)
 
     @classmethod
-    def traffic_accident_all(cls):
+    def road_accident_all(cls):
         return cls.objects.all()
 
-    def update_traffic_accident(self, date, time, message, *args, **kwargs):
+    def update_road_accident(self, date, time, message, location, *args, **kwargs):
         if date is not None:
             self.date = date
         if time is not None:
             self.time = time
         if message is not None:
             self.message = message
+        if location is not None:
+            self.location = location
         super().save(*args, **kwargs)
 
-    def delete_traffic_accident(self, *args, **kwargs):
-        super(TrafficAccident, self).delete(*args, **kwargs)
+    def delete_road_accident(self, *args, **kwargs):
+        super(RoadAccident, self).delete(*args, **kwargs)
 
-    def search_traffic_accident(cls, keyword):
+    @classmethod
+    def search_road_accident(cls, keyword):
         return cls.objects.filter(message__icontains=keyword)
 
-    def get_traffic_accident(self, message):
-        return TrafficAccident.objects.get(message=message)
+    def get_road_accident(self, id):
+        return RoadAccident.objects.get(id=id)
+
 
 
 # Traffic Closure
-class TrafficClosure(models.Model):
+class RoadClosure(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.CharField(max_length=100)
-    time = models.CharField(max_length=20)
+    date = models.DateField()
+    time = models.TimeField()
     message = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Traffic Closure, datetime: {self.date, self.time}, message: {self.message}"
+        return f"Road Closure, datetime: {self.date, self.time}, message: {self.message}"
 
-    def create_traffic_closure(self, date, time, message, *args, **kwargs):
+    def create_road_closure(self, date, time, message, location, *args, **kwargs):
         self.message = message
         self.date = date
         self.time = time
+        self.location = location
         super().save(*args, **kwargs)
 
     @classmethod
-    def traffic_closure_all(cls):
+    def road_closure_all(cls):
         return cls.objects.all()
 
-    def update_traffic_closure(self, date, time, message, *args, **kwargs):
+    def update_road_closure(self, date, time, message, location, *args, **kwargs):
         if date is not None:
             self.date = date
         if time is not None:
             self.time = time
         if message is not None:
             self.message = message
+        if location is not None:
+            self.location = location
         super().save(*args, **kwargs)
 
-    def delete_traffic_closure(self, *args, **kwargs):
-        super(TrafficClosure, self).delete(*args, **kwargs)
+    def delete_road_closure(self, *args, **kwargs):
+        super(RoadClosure, self).delete(*args, **kwargs)
 
-    def search_traffic_closure(cls, keyword):
+    @classmethod
+    def search_road_closure(cls, keyword):
         return cls.objects.filter(message__icontains=keyword)
 
-    def get_traffic_closure(self, message):
-        return TrafficClosure.objects.get(message=message)
+    def get_road_closure(self, id):
+        return RoadClosure.objects.get(id=id)
 
 """
 class TrafficJam(models.Model):

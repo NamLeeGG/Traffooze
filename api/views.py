@@ -103,12 +103,12 @@ def create_traffic_jam(request):
         date = request.data.get('date')
         time = request.data.get('time')
         message = request.data.get('message')
+        location = request.data.get('location')
 
-        if not date or not time or not message:
+        if not date or not time or not message or not location:
             return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
 
-        traffic_jam = TrafficJam()
-        traffic_jam.create_traffic_jam(date=date, time=time, message=message)
+        traffic_jam = TrafficJam(date=date, time=time, message=message, location=location)
         traffic_jam.save()
 
         return Response({"message": "Traffic jam created successfully"}, status=status.HTTP_201_CREATED)
@@ -118,45 +118,63 @@ def create_traffic_jam(request):
 @api_view(['GET'])
 def view_traffic_jam(request):
     try:
-        trafficjams = TrafficJam.traffic_jam_all()
-        data = [{'id': tj.id, 'date': tj.date, 'time': tj.time, 'message': tj.message} for tj in trafficjams]
+        trafficjams = TrafficJam.objects.all()
+        data = [{'id': tj.id, 'date': tj.date, 'time': tj.time, 'message': tj.message, 'location': tj.location} for tj in trafficjams]
         return Response(data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def update_traffic_jam(request):
-    trafficjam = TrafficJam()
-    id = request.data.get('id')
-    date = request.data.get('date')
-    time = request.data.get('time')
-    message = request.data.get('message')
+    try:
+        trafficjam_id = request.data.get('id')
+        date = request.data.get('date')
+        time = request.data.get('time')
+        message = request.data.get('message')
+        location = request.data.get('location')
 
-    mytrafficjam = trafficjam.get_traffic_jam(id)
-    if date == '' : date = None
-    if time == '' : time = None
-    if message == '' : message = None
-    mytrafficjam.update_traffic_jam(date, time, message)
-    return Response(status=status.HTTP_200_OK)
+        trafficjam = TrafficJam.objects.get(id=trafficjam_id)
+        if date:
+            trafficjam.date = date
+        if time:
+            trafficjam.time = time
+        if message:
+            trafficjam.message = message
+        if location:
+            trafficjam.location = location
+        trafficjam.save()
+
+        return Response({"message": "Traffic jam updated successfully"}, status=status.HTTP_200_OK)
+    except TrafficJam.DoesNotExist:
+        return Response({"error": "Traffic jam not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def delete_traffic_jam(request):
-    trafficjam = TrafficJam()
-    id = request.data.get('id')
-    mytrafficjam = trafficjam.get_traffic_jam(id)
-    mytrafficjam.delete_traffic_jam()
-    return Response(status=status.HTTP_200_OK)
+    try:
+        trafficjam_id = request.data.get('id')
+        trafficjam = TrafficJam.objects.get(id=trafficjam_id)
+        trafficjam.delete()
+
+        return Response({"message": "Traffic jam deleted successfully"}, status=status.HTTP_200_OK)
+    except TrafficJam.DoesNotExist:
+        return Response({"error": "Traffic jam not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def search_traffic_jam(request):
-    keyword = request.data.get('keyword', '')
-    if not keyword:
-        return JsonResponse({'error' : 'Please provide a keyword to search for'})
+    try:
+        keyword = request.data.get('keyword', '')
+        if not keyword:
+            return JsonResponse({'error': 'Please provide a keyword to search for'})
 
-    result = TrafficJam.search_traffic_jam(keyword)
-    trafficjams = [tj for tj in result]
-    data = [{'id':tj.id, 'date':tj.date, 'time':tj.time, 'message':tj.message} for tj in trafficjams]
-    return Response(data)
+        result = TrafficJam.objects.filter(message__icontains=keyword)
+        data = [{'id': tj.id, 'date': tj.date, 'time': tj.time, 'message': tj.message, 'location': tj.location} for tj in result]
+        return Response(data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 '''
 class ViewTrafficJam(APIView):
