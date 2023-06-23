@@ -25,6 +25,16 @@ from rest_framework.response import Response
 # Create your views here.
 
 ###### ACCOUNT ######
+#ACCOUNT CONTROLLING
+@api_view(['GET'])
+def getUserAccount(request):
+    result = User.userall()
+
+    user = [u for u in result]
+    data = [{'id': u.id, 'username': u.username, 'email': u.email} for u in user]
+    return Response(data)
+
+
 #LOGIN
 @api_view(['POST'])
 @permission_classes([AllowAny])
