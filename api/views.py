@@ -28,10 +28,8 @@ from rest_framework.response import Response
 #ACCOUNT CONTROLLING
 @api_view(['GET'])
 def getUserAccount(request):
-    result = User.userall()
-
-    user = [u for u in result]
-    data = [{'id': u.id, 'username': u.username, 'email': u.email} for u in user]
+    users = User.objects.all()
+    data = [{'id': user.id, 'username': user.username, 'email': user.email} for user in users]
     return Response(data)
 
 
@@ -60,7 +58,8 @@ def login(request):
         return response
     else:
         raise AuthenticationFailed('Invalid credentials')
-    
+
+
 #LOGOUT
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -74,6 +73,7 @@ def logout(request):
     response.delete_cookie('token')  # remove session cookie
     logout(request)  # Logout the user
     return response
+
 
 #REGISTER
 @api_view(['POST'])
