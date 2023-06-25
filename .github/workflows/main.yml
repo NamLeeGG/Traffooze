@@ -1,4 +1,4 @@
-"""
+
 name: Dev workflow - Build and run tests then deploy to vercel
 
 on:
@@ -26,4 +26,3 @@ jobs:
       run: pip install -r requirements.txt
     - name: Run unit tests
       run: python manage.py test UnitTest --failfast
-"""
