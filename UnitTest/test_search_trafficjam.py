@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
@@ -8,9 +9,9 @@ class SearchTrafficJamTestCase(APITestCase):
     
     def test_search_traffic_jam(self):
         # Create traffic jam objects with different messages
-        traffic_jam1 = TrafficJam.objects.create(date='18/06/2023', time='22:47', message='Sample message 1')
-        traffic_jam2 = TrafficJam.objects.create(date='19/06/2023', time='10:15', message='Another message')
-        traffic_jam3 = TrafficJam.objects.create(date='20/06/2023', time='16:30', message='Sample message 2')
+        traffic_jam1 = TrafficJam.objects.create(date='2023-06-18', time='22:47', message='Sample message 1', location='1.30398068448214,103.919182834377')
+        traffic_jam2 = TrafficJam.objects.create(date='2023-06-19', time='10:15', message='Another message', location='1.30398068448214,103.919182834378')
+        traffic_jam3 = TrafficJam.objects.create(date='2023-06-20', time='16:30', message='Sample message 2', location='1.30398068448214,103.919182834100')
 
         # Send a POST request to the search_traffic_jam endpoint
         url = reverse('search-traffic-jam')
@@ -21,8 +22,20 @@ class SearchTrafficJamTestCase(APITestCase):
 
         # Verify the search results
         expected_data = [
-            {'id': traffic_jam1.id, 'date': '18/06/2023', 'time': '22:47', 'message': 'Sample message 1'},
-            {'id': traffic_jam3.id, 'date': '20/06/2023', 'time': '16:30', 'message': 'Sample message 2'}
+            {
+                'id': traffic_jam1.id,
+                'date': datetime.strptime(traffic_jam1.date, '%Y-%m-%d').date(),
+                'time': datetime.strptime(traffic_jam1.time, '%H:%M').time(),
+                'message': 'Sample message 1',
+                'location': '1.30398068448214,103.919182834377'
+            },
+            {
+                'id': traffic_jam3.id,
+                'date': datetime.strptime(traffic_jam3.date, '%Y-%m-%d').date(),
+                'time': datetime.strptime(traffic_jam3.time, '%H:%M').time(),
+                'message': 'Sample message 2',
+                'location': '1.30398068448214,103.919182834100'
+            }
         ]
         self.assertEqual(response.data, expected_data)
 

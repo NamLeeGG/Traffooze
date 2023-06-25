@@ -31,7 +31,7 @@ class LoginTest(TestCase):
         token = response.data['token']
         self.assertEqual(self.user.auth_token.key, token)
 
-        print("test login correct passed")
+        print("test login passed")
 
     #Login fail
     def test_login_invalid(self):
@@ -43,13 +43,13 @@ class LoginTest(TestCase):
         data = {'username': 'invalidusername', 'password': self.password}
 
         response = self.client.post(url, data, format='json')
-        
+
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertIn('Invalid credentials', response.data['detail'])
         self.assertNotIn('token', response.data)
         self.assertNotIn('token', response.cookies)
 
-        print("test login invalid passed")
+        print("test login invalid credentials passed")
 
     def addFailure(self, test, exc_info):
         super().addFailure(test, exc_info)
