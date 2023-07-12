@@ -186,6 +186,166 @@ def search_traffic_jam(request):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+###### TRAFFIC ACCIDENT ######    
+@api_view(['POST'])
+def create_road_accident(request):
+    try:
+        date = request.data.get('date')
+        time = request.data.get('time')
+        message = request.data.get('message')
+        location = request.data.get('location')
+
+        if not date or not time or not message or not location:
+            return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
+
+        road_accident = RoadAccident(date=date, time=time, message=message, location=location)
+        road_accident.save()
+
+        return Response({"message": "Road accident created successfully"}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def view_road_accident(request):
+    try:
+        roadaccidents = RoadAccident.objects.all()
+        data = [{'id': ra.id, 'date': ra.date, 'time': ra.time, 'message': ra.message, 'location': ra.location} for ra in roadaccidents]
+        return Response(data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def update_road_accident(request):
+    try:
+        roadaccident_id = request.data.get('id')
+        date = request.data.get('date')
+        time = request.data.get('time')
+        message = request.data.get('message')
+        location = request.data.get('location')
+
+        roadaccident = RoadAccident.objects.get(id=roadaccident_id)
+        if date:
+            roadaccident.date = date
+        if time:
+            roadaccident.time = time
+        if message:
+            roadaccident.message = message
+        if location:
+            roadaccident.location = location
+        roadaccident.save()
+
+        return Response({"message": "Road accident updated successfully"}, status=status.HTTP_200_OK)
+    except RoadAccident.DoesNotExist:
+        return Response({"error": "Road accident not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def delete_road_accident(request):
+    try:
+        roadaccident_id = request.data.get('id')
+        roadaccident = RoadAccident.objects.get(id=roadaccident_id)
+        roadaccident.delete()
+
+        return Response({"message": "Road accident deleted successfully"}, status=status.HTTP_200_OK)
+    except RoadAccident.DoesNotExist:
+        return Response({"error": "Road accident not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def search_road_accident(request):
+    try:
+        keyword = request.data.get('keyword', '')
+        if not keyword:
+            return JsonResponse({'error': 'Please provide a keyword to search for'})
+
+        result = RoadAccident.objects.filter(message__icontains=keyword)
+        data = [{'id': ra.id, 'date': ra.date, 'time': ra.time, 'message': ra.message, 'location': ra.location} for ra in result]
+        return Response(data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+###### TRAFFIC CLOSURE ######    
+@api_view(['POST'])
+def create_road_closure(request):
+    try:
+        date = request.data.get('date')
+        time = request.data.get('time')
+        message = request.data.get('message')
+        location = request.data.get('location')
+
+        if not date or not time or not message or not location:
+            return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
+
+        road_closure = RoadClosure(date=date, time=time, message=message, location=location)
+        road_closure.save()
+
+        return Response({"message": "Road closure created successfully"}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def view_road_closure(request):
+    try:
+        roadclosures = RoadClosure.objects.all()
+        data = [{'id': rc.id, 'date': rc.date, 'time': rc.time, 'message': rc.message, 'location': rc.location} for rc in roadclosures]
+        return Response(data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def update_road_closure(request):
+    try:
+        roadclosure_id = request.data.get('id')
+        date = request.data.get('date')
+        time = request.data.get('time')
+        message = request.data.get('message')
+        location = request.data.get('location')
+
+        roadclosure = RoadClosure.objects.get(id=roadclosure_id)
+        if date:
+            roadclosure.date = date
+        if time:
+            roadclosure.time = time
+        if message:
+            roadclosure.message = message
+        if location:
+            roadclosure.location = location
+        roadclosure.save()
+
+        return Response({"message": "Road closure updated successfully"}, status=status.HTTP_200_OK)
+    except RoadClosure.DoesNotExist:
+        return Response({"error": "Road closure not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def delete_road_closure(request):
+    try:
+        roadclosure_id = request.data.get('id')
+        roadclosure = RoadClosure.objects.get(id=roadclosure_id)
+        roadclosure.delete()
+
+        return Response({"message": "Road closure deleted successfully"}, status=status.HTTP_200_OK)
+    except RoadClosure.DoesNotExist:
+        return Response({"error": "Road closure not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def search_road_closure(request):
+    try:
+        keyword = request.data.get('keyword', '')
+        if not keyword:
+            return JsonResponse({'error': 'Please provide a keyword to search for'})
+
+        result = RoadClosure.objects.filter(message__icontains=keyword)
+        data = [{'id': rc.id, 'date': rc.date, 'time': rc.time, 'message': rc.message, 'location': rc.location} for rc in result]
+        return Response(data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 '''
 class ViewTrafficJam(APIView):
     authentication_classes = [TokenAuthentication]
