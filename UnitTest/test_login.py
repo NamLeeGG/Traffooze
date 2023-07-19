@@ -33,14 +33,14 @@ class LoginTest(TestCase):
 
         print("test login passed")
 
-    #Login fail
-    def test_login_invalid(self):
+    #Invalid username, valid password
+    def test_login_invalid_username_and_password(self):
         if not login_exists:
             return
         
         url = reverse('login')
 
-        data = {'username': 'invalidusername', 'password': self.password}
+        data = {'username': 'invalidusername', 'password': "invalidpassword"}
 
         response = self.client.post(url, data, format='json')
 
@@ -49,7 +49,24 @@ class LoginTest(TestCase):
         self.assertNotIn('token', response.data)
         self.assertNotIn('token', response.cookies)
 
-        print("test login invalid credentials passed")
+        print("test login invalid username & password passed")
+
+    def test_login_invalid_password(self):
+        if not login_exists:
+            return
+        
+        url = reverse('login')
+
+        data = {'username': self.username, 'password': 'invalidpassword'}
+
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn('Invalid credentials', response.data['detail'])
+        self.assertNotIn('token', response.data)
+        self.assertNotIn('token', response.cookies)
+
+        print("test login invalid password passed")
 
     def addFailure(self, test, exc_info):
         super().addFailure(test, exc_info)
