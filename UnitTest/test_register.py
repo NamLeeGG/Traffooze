@@ -48,7 +48,7 @@ class RegisterAccountTestCase(APITestCase):
 
 
 '''
-import jsonn
+import json
 from core.models import User
 from django.db import DatabaseError
 from django.test import TestCase, Client
