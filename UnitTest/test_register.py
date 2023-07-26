@@ -44,7 +44,7 @@ class RegisterAccountTestCase(APITestCase):
             response.data['error'], 'Password cannot be empty'
         )
 
-        print("password test passed")
+        print("test register empty password passed")
 
 
 '''

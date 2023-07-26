@@ -2,16 +2,14 @@ from core.models import TrafficJam
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-#from operator import attrgetter
-
 
 class ViewTrafficJamTestCase(APITestCase):
     def test_retrieve_cr_authorized(self):
         url = reverse('view-traffic-jam')
 
         # Create some test CinemaRoom instances with matching keyword
-        TJ1 = TrafficJam.objects.create(date= '18/06/2023', time= '22:47', message= 'Sample message 1')
-        TJ2 = TrafficJam.objects.create(date= '19/06/2023', time= '08:30', message= 'Sample message 2')
+        TJ1 = TrafficJam.objects.create(date= '2023-06-18', time= '22:47', message= 'Sample message 1', location='1.30398068448214,103.919182834377')
+        TJ2 = TrafficJam.objects.create(date= '2023-06-19', time= '08:30', message= 'Sample message 2', location='1.30398068448214,103.919182834100')
 
         response = self.client.get(url)
 
@@ -19,14 +17,17 @@ class ViewTrafficJamTestCase(APITestCase):
         self.assertEqual(len(response.data), 2)
 
         self.assertEqual(response.data[0]['id'], TJ1.id)
-        self.assertEqual(response.data[0]['date'], TJ1.date)
-        self.assertEqual(response.data[0]['time'], TJ1.time)
+        self.assertEqual(str(response.data[0]['date']), TJ1.date)
+        self.assertEqual(str(response.data[0]['time'].strftime('%H:%M')), TJ1.time)
         self.assertEqual(response.data[0]['message'], TJ1.message)
+        self.assertEqual(response.data[0]['location'], TJ1.location)
 
         self.assertEqual(response.data[1]['id'], TJ2.id)
-        self.assertEqual(response.data[1]['date'], TJ2.date)
-        self.assertEqual(response.data[1]['time'], TJ2.time)
+        self.assertEqual(str(response.data[1]['date']), TJ2.date)
+        self.assertEqual(str(response.data[1]['time'].strftime('%H:%M')), TJ2.time)
         self.assertEqual(response.data[1]['message'], TJ2.message)
+        self.assertEqual(response.data[1]['location'], TJ2.location)
+
         print('test view traffic jam passed')
 '''
     def test_view_traffic_jam(self):
