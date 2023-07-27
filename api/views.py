@@ -11,7 +11,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from core.models import User, TrafficJam
+from core.models import User, TrafficJam, RoadClosure
 from .serializers import UserSerializer, TrafficJamSerializer
 
 # LOGIN 
