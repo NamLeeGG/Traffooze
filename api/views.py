@@ -11,7 +11,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from core.models import User, TrafficJam, RoadClosure
+from core.models import User, TrafficJam, RoadClosure, RoadAccident
 from .serializers import UserSerializer, TrafficJamSerializer
 
 # LOGIN 
@@ -77,6 +77,7 @@ def logout(request):
 
 #REGISTER
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register_account(request):
     try:
         # Extract the necessary data from the request
