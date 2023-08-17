@@ -29,7 +29,7 @@ from rest_framework.response import Response
 @api_view(['GET'])
 def getUserAccount(request):
     users = User.objects.all()
-    data = [{'id': user.id, 'username': user.username, 'email': user.email} for user in users]
+    data = [{'id': user.id, 'username': user.username,} for user in users]
     return Response(data)
 
 
