@@ -77,7 +77,6 @@ def logout(request):
 
 #REGISTER
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def register_account(request):
     try:
         # Extract the necessary data from the request
