@@ -29,7 +29,7 @@ from rest_framework.response import Response
 @api_view(['GET'])
 def getUserAccount(request):
     users = User.objects.all()
-    data = [{'id': user.id, 'username': user.username,} for user in users]
+    data = [{'id': user.id, 'username': user.username, 'email': user.email} for user in users]
     return Response(data)
 
 
@@ -82,6 +82,7 @@ def register_account(request):
         # Extract the necessary data from the request
         username = request.data.get('username')
         password = request.data.get('password')
+        email = request.data.get('email')
 
         if not password:
             return Response({"error": "Password cannot be empty"}, status=400)
@@ -89,6 +90,7 @@ def register_account(request):
         # Create a new user instance
         user = User(
             username=username,
+            email=email,
             is_active=True,
             is_staff=False,
             is_superuser=False

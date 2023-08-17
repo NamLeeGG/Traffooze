@@ -33,12 +33,14 @@ class SystemAdmin(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=30, unique=True)
+    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # add this
     is_superuser = models.BooleanField(default=False)  # add this
 
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     objects = SystemAdmin()  # set your custom manager
 
