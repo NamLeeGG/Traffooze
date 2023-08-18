@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',  
     'rest_framework.authtoken',
     'oauth2_provider',
+    'corsheaders',
     'core',
     'api',
 ]
@@ -69,6 +70,10 @@ REST_FRAMEWORK = {
     ],
 }
 
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'https://traffooze.vercel.app',
+]
 
 ROOT_URLCONF = 'TraffoozePrj.urls'
 
