@@ -17,8 +17,6 @@ class CreateRoadAccidentTestCase(APITestCase):
         url = reverse('create-road-accident')
         response = self.client.post(url, road_accident_data)
 
-        print("heyyy: ", response.data)
-
         # Assert the response
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], "Road accident created successfully")
