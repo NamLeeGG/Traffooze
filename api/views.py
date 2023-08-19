@@ -32,6 +32,46 @@ def getUserAccount(request):
     data = [{'id': user.id, 'username': user.username, 'email': user.email} for user in users]
     return Response(data)
 
+@api_view(['POST'])
+def get_email_by_username(request):
+    try:
+        username = request.data.get('username')
+        useremail = User.objects.get(username=username)
+        data = {'email': useremail.email}
+        return Response(data)
+    except User.DoesNotExist:
+        return Response({"error": "Username not found"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def change_password_and_email(request):
+    try:
+        username = request.data.get('username')
+        password = request.data.get('password')
+        email = request.data.get('email')
+        user = User.objects.get(username=username)
+        password_changed = False
+        email_changed = False
+
+        if password != user.password:
+            user.password = password
+            password_changed = True
+
+        if email != user.email:
+            user.email = email
+            email_changed = True
+
+        if email_changed or password_changed:
+                user.save()
+                data = {
+                    'message': 'User information updated successfully.',
+                    'email_changed': email_changed,
+                    'password_changed': password_changed
+                }
+                return Response(data)    
+        else:
+            return Response({'message': 'No changes made.'})
+    except User.DoesNotExist:
+        return Response({"error": "Username not found"}, status=status.HTTP_404_NOT_FOUND)
 
 #LOGIN
 @api_view(['POST'])
