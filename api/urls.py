@@ -3,6 +3,8 @@ from api import views
 
 urlpatterns = [
     path('', views.getUserAccount, name='get-user-account'),
+    path('get-email-by-username/', views.get_email_by_username, name='get-email-by-username'),
+    path('change-password-and-email/', views.change_password_and_email, name='change-password-and-email'),
   
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
@@ -20,4 +22,9 @@ urlpatterns = [
     path('delete-road-accident/', views.delete_road_accident, name='delete-road-accident'),
     path('search-road-accident/', views.search_road_accident, name='search-road-accident'),
 
+    path('create-road-closure/', views.create_road_closure, name='create-road-closure'),
+    path('view-road-closure/', views.view_road_closure, name='view-road-closure'),
+    path('update-road-closure/', views.update_road_closure, name='update-road-closure'),
+    path('delete-road-closure/', views.delete_road_closure, name='delete-road-closure'),
+    path('search-road-closure/', views.search_road_closure, name='search-road-closure'),
 ]
