@@ -123,7 +123,6 @@ def user_logout(request):
     except Exception as e:
         # Handle any unexpected error
         return Response({'message': 'An unexpected error occurred: {}'.format(str(e))}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return response
 
 
 #REGISTER
