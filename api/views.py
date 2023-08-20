@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.exceptions import PermissionDenied, AuthenticationFailed
+from rest_framework.exceptions import PermissionDenied, AuthenticationFailed, APIException
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
@@ -19,7 +19,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from rest_framework import status
 # LOGOUT
-from django.contrib.auth import logout
+from django.contrib.auth import logout as django_logout
 from rest_framework.response import Response
 
 # Create your views here.
@@ -105,14 +105,24 @@ def login(request):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def logout(request):
-    if not request.user.is_authenticated:
-        raise PermissionDenied()
-    if request.user.is_authenticated:
+def user_logout(request):
+    try:
+        # Remove the user's authentication token
         Token.objects.filter(user=request.user).delete()
-    response = Response({'message': 'Logout success'}, status=status.HTTP_200_OK)
-    response.delete_cookie('token')  # remove session cookie
-    logout(request)  # Logout the user
+
+        # Logout using Django's built-in method
+        django_logout(request)
+
+        response = Response({'message': 'Logout success'}, status=status.HTTP_200_OK)
+        response.delete_cookie('token')  # remove session cookie if you have it set
+        return response
+
+    except DatabaseError:
+        # Handle specific database related errors
+        return Response({'message': 'Database error during logout.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        # Handle any unexpected error
+        return Response({'message': 'An unexpected error occurred: {}'.format(str(e))}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return response
 
 
