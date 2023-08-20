@@ -105,7 +105,7 @@ def login(request):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def user_logout(request):
+def logout(request):
     try:
         # Remove the user's authentication token
         Token.objects.filter(user=request.user).delete()
