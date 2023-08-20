@@ -38,7 +38,7 @@ def get_email_by_username(request):
         username = request.data.get('username')
         useremail = User.objects.get(username=username)
         data = {'email': useremail.email}
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response({"error": "Username not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -52,26 +52,27 @@ def change_password_and_email(request):
         password_changed = False
         email_changed = False
 
-        if password != user.password:
-            user.password = password
+        if password is not None and password != "" and password != user.password:
+            user.set_password(password)  # Always use set_password for hashing
             password_changed = True
 
-        if email != user.email:
+        if email is not None and email != "" and email != user.email:
             user.email = email
             email_changed = True
 
         if email_changed or password_changed:
-                user.save()
-                data = {
-                    'message': 'User information updated successfully.',
-                    'email_changed': email_changed,
-                    'password_changed': password_changed
-                }
-                return Response(data)    
+            user.save()
+            data = {
+                'message': 'User information updated successfully.',
+                'email_changed': email_changed,
+                'password_changed': password_changed
+            }
+            return Response(data, status=status.HTTP_200_OK)    
         else:
             return Response({'message': 'No changes made.'})
     except User.DoesNotExist:
         return Response({"error": "Username not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 #LOGIN
 @api_view(['POST'])
