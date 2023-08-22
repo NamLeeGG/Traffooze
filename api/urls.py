@@ -5,6 +5,9 @@ urlpatterns = [
     path('', views.getUserAccount, name='get-user-account'),
     path('get-email-by-username/', views.get_email_by_username, name='get-email-by-username'),
     path('change-password-and-email/', views.change_password_and_email, name='change-password-and-email'),
+
+    path('update-address/', views.update_address, name='update-address'),
+    path('get-address/', views.get_address, name='get-address'),
   
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),

@@ -71,8 +71,57 @@ def change_password_and_email(request):
         else:
             return Response({'message': 'No changes made.'})
     except User.DoesNotExist:
-        return Response({"error": "Username not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Username not found"}, status=status.HTTP_404_NOT_FOUND)  
+    
+@api_view(['POST'])
+def get_address(request):
+    # Retrieve the username from the request data
+    username = request.data.get('username')
 
+    if not username:
+        return Response({'message': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Find the user with the given username
+        user = User.objects.get(username=username)
+
+        # Send back the home and work address
+        data = {
+            'homeAddress': user.homeAddress,
+            'workAddress': user.workAddress
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
+
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({'message': 'An unexpected error occurred: {}'.format(str(e))}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def update_address(request):
+    try:
+        # Get the username, homeAddress, and workAddress from the request data
+        username = request.data.get('username')
+        home_address = request.data.get('homeAddress', '')  # defaults to empty string if not provided
+        work_address = request.data.get('workAddress', '')  # defaults to empty string if not provided
+
+        # Find the user with the provided username
+        user = User.objects.get(username=username)
+        
+        # Update the user's addresses
+        user.homeAddress = home_address
+        user.workAddress = work_address
+        user.save()
+
+        return Response({'message': 'Address updated successfully'}, status=status.HTTP_200_OK)
+
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({'message': 'An unexpected error occurred: {}'.format(str(e))}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 #LOGIN
 @api_view(['POST'])
