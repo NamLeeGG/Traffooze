@@ -39,6 +39,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)  # add this
     is_superuser = models.BooleanField(default=False)  # add this
 
+    homeAddress = models.CharField(max_length=255, default='', blank=True)
+    workAddress = models.CharField(max_length=255, default='', blank=True)
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 

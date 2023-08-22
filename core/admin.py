@@ -8,20 +8,21 @@ from django.utils.translation import gettext_lazy as _
 class CustomSystemAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('email',)}),  
+        (_('Personal info'), {'fields': ('email', 'homeAddress', 'workAddress')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'is_staff'),
+            'fields': ('username', 'email', 'password1', 'password2', 'is_staff', 'homeAddress', 'workAddress'),
         }),
     )
-    list_display = ('username', 'email', 'is_staff')
+    list_display = ('username', 'email', 'is_staff', 'homeAddress', 'workAddress')
     list_filter = ('username',)
-    search_fields = ('username', 'email')
+    search_fields = ('username', 'email', 'homeAddress', 'workAddress')
     ordering = ('username',)
+
 
 class TrafficJamAdmin(admin.ModelAdmin):
     list_display = ('id', 'date', 'time', 'message', 'location')
